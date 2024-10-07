@@ -2,6 +2,7 @@
 
 namespace DTApi\Repository;
 
+use DTApi\Constants\Constants;
 use DTApi\Models\Company;
 use DTApi\Models\Department;
 use DTApi\Models\Type;
@@ -60,7 +61,7 @@ class UserRepository extends BaseRepository
         $model->attachRole($request['role']);
         $data = array();
 
-        if ($request['role'] == env('CUSTOMER_ROLE_ID')) {
+        if ($request['role'] == Constants::CUSTOMER_ROLE_ID) {
 
             if($request['consumer_type'] == 'paid')
             {
@@ -129,7 +130,7 @@ class UserRepository extends BaseRepository
             }
 
 
-        } else if ($request['role'] == env('TRANSLATOR_ROLE_ID')) {
+        } else if ($request['role'] == Constants::TRANSLATOR_ROLE_ID) {
 
             $user_meta = UserMeta::firstOrCreate(['user_id' => $model->id]);
 

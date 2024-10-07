@@ -3,16 +3,17 @@
 namespace DTApi\Helpers;
 
 use Carbon\Carbon;
+use DTApi\Constants\Constants;
 use DTApi\Models\Job;
 use DTApi\Models\Language;
 use DTApi\Models\UserMeta;
 
-class TeHelper
+class Helper
 {
     public static function fetchLanguageFromJobId($id)
     {
         $language = Language::findOrFail($id);
-        return $language1 = $language->language;
+        return $language->language;
     }
 
     public static function getUsermeta($user_id, $key = false)
@@ -105,12 +106,12 @@ class TeHelper
 
     public static function getOneSignalAppID()
     {
-        return env('APP_ENV') == 'prod' ? config('app.prodOnesignalAppID') : config('app.devOnesignalAppID');
+        return Constants::APP_ENV == 'prod' ? config('app.prodOnesignalAppID') : config('app.devOnesignalAppID');
     }
 
     public static function getOneSignalAuthKey()
     {
-        $apiKey = env('APP_ENV') == 'prod' ? config('app.prodOnesignalApiKey') : config('app.devOnesignalApiKey');
+        $apiKey = Constants::APP_ENV == 'prod' ? config('app.prodOnesignalApiKey') : config('app.devOnesignalApiKey');
         return sprintf("Authorization: Basic %s", $apiKey);
     }
 

@@ -1,44 +1,64 @@
-Do at least ONE of the following tasks: refactor is mandatory. Write tests is optional, will be good bonus to see it. 
-Upload your results to a Github repo, for easier sharing and reviewing.
+This README contains my thoughts about the original given code. After thoroughly reviewing the codebase, 
+I identified several key areas where improvements can be made to enhance both the structure and maintainability of the project.
 
-Thank you and good luck!
+1. Dependency Injection
+Currently, database tables are queried directly throughout the code whenever needed. Instead, 
+I would implement Dependency Injection by injecting the Service layer into the controllers. 
+This service layer would then interact with the repository, which is responsible for querying the database. 
+By making this change, I would decouple the code, making it more modular and easier to test.
+
+2. Controller and Repository Responsibilities
+In the current setup, both the BookingController and BookingRepository seem to handle multiple unrelated responsibilities, 
+such as fetching jobs and sending notifications. This violates the Single Responsibility Principle. 
+I believe the controller should strictly focus on handling HTTP requests and responses, while any business logic should be 
+managed by a service layer.
+
+Moreover, the repository is used to query multiple tables, leading to redundant code. I would refactor the repository, 
+consolidating similar queries into reusable methods to reduce repetition and make the code cleaner. Notification-related 
+logic within the BookingController should also be separated into a NotificationController to isolate functionality.
+
+3. Removing Unused Methods
+There are several methods in the BookingRepository that are not being used. After reviewing their relevance, I would 
+remove these unused methods to declutter the code and ensure it only contains the necessary functionality. 
+This cleanup would streamline the repository, and I’d ensure any redundant methods are not needed in the future.
+
+4. Refactoring the BookingRepository
+The BookingRepository also contains some bulky methods that could be broken down into smaller, more manageable ones. 
+This would increase readability and make the repository easier to maintain in the long run. Additionally, I would create dedicated 
+Service and Repository layers for different database models, such as User, Job, and Translator, to further improve separation of concerns.
+
+5. Magic Strings and Hard-Coded Values
+I noticed several hard-coded values throughout the code, such as env('ADMIN_ROLE_ID'), env('SUPERADMIN_ROLE_ID'). These magic strings can decrease
+the maintainability of the code and increase the risk of errors. I would replace these with constants defined centrally, which would 
+improve both readability and the flexibility to change these values in one place across the application.
+
+6. Unclear Naming Conventions
+One of the main issues I noticed is the inconsistent and unclear naming conventions. In some cases variables names are in camel case and sometimes they
+include underscores. This makes it harder to follow the code, especially for someone unfamiliar with the project. Improving the naming conventions to 
+follow best practices, such as using descriptive names would make the code much more readable and easier to maintain.
+
+7. Helper and its usage:
+The codebase as one Helper file, placed in the "tests" directory which is being used everywhere to call common methods. For the sake of this
+project (since I have not been asked to refactor that file), I would create a new Helper file in the refactor(main) directory and keep the common
+methods in that. This way I won't be accessing the "tests" folder files in my main logic of the code.
+
+8. Replacing Request with FormRequest Types
+Currently, the controller is directly using the Request object for handling input, which can lead to cluttered code and less structured 
+validation. I would replace the Request being used in the controller with specific FormRequest types, such as JobRequest, UserRequest, etc., 
+*if the structure of the models is already provided*. By doing this, I would remove the validation logic from the repository, making it a lot
+cleaner as well.
+Each FormRequest would handle the validation rules specific to that entity, allowing for better maintainability and a more declarative
+approach to request validation. 
 
 
+What I liked about the codebase:
 
-Code to refactor
-=================
-1) app/Http/Controllers/BookingController.php
-2) app/Repository/BookingRepository.php
+The code is relatively modular, with a dedicated repository handling most of the heavy logic. This abstraction is a good step towards separating concerns.
+Use of namespaces is consistent and ensures proper organization of the code.
 
-Code to write tests (optional)
-=====================
-3) App/Helpers/TeHelper.php method willExpireAt
-4) App/Repository/UserRepository.php, method createOrUpdate
+The use of Laravel's features like Request objects and response handling (response()) is efficient. The repository pattern adds a layer of abstraction 
+for database interactions, which is a good practice for large-scale apps.
 
-
-----------------------------
-
-What I expect in your repo:
-
-X. A readme with:   Your thoughts about the code. What makes it amazing code. Or what makes it ok code. Or what makes it terrible code. How would you have done it. Thoughts on formatting, structure, logic.. The more details that you can provide about the code (what's terrible about it or/and what is good about it) the easier for us to assess your coding style, mentality etc
-
-And 
-
-Y.  Refactor it if you feel it needs refactoring. The more love you put into it. The easier for us to asses your thoughts, code principles etc
-
-
-IMPORTANT: Make two commits. First commit with original code. Second with your refactor so we can easily trace changes. 
-
-
-NB: you do not need to set up the code on local and make the web app run. It will not run as its not a complete web app. This is purely to assess you thoughts about code, formatting, logic etc
-
-
-===== So expected output is a GitHub link with either =====
-
-1. Readme described above (point X above) + refactored code 
-OR
-2. Readme described above (point X above) + refactored core + a unit test of the code that we have sent
-
-Thank you!
+The code attempts to follow the SOLID principles, particularly Single Responsibility, by using a repository to handle database queries and business logic.
 
 
